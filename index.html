@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MenuKind — food that fits you</title>
+<style>
+:root {
+ --site-primary:#176B55; --site-secondary:#F1C77B; --site-background:#F7F5EF;
+ --site-on-primary:#FFFFFF; --site-on-secondary:#302819; --site-on-background:#1D2C26;
+ --site-font-body:Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+ --site-font-heading:Georgia, 'Times New Roman', serif;
+ --site-heading-scale:1; --site-spacing-scale:1; --site-radius-scale:1;
+ --site-decoration-opacity:1;
+ color-scheme: light dark;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--site-font-body);background:light-dark(#f7f5ef,#111a17);color:light-dark(#1d2c26,#edf5ef)}
+#app{background-color:var(--site-background);color:var(--site-on-background);min-height:100vh;border-radius:0}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px clamp(18px,5vw,72px);border-bottom:1px solid #dce3d9;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.04em;font-size:1.25rem}
+.logo{display:grid;place-items:center;background:var(--site-primary);color:var(--site-on-primary);width:38px;height:38px;border-radius:13px}
+nav{display:flex;gap:20px;font-size:.9rem;color:#4b655a}
+nav a{color:inherit;text-decoration:none}
+.pill{border-radius:999px;background:#e1eee4;color:#176b55;padding:8px 13px;font-size:.78rem;font-weight:700}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding:clamp(34px,6vw,78px) clamp(18px,7vw,100px);background:linear-gradient(120deg,#f7f5ef 55%,#e8f0e4)}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;font-weight:800;color:#176b55}
+h1,h2,h3{font-family:var(--site-font-heading);font-weight:500;letter-spacing:-.04em}
+h1{font-size:clamp(2.7rem,5vw,5rem);line-height:1.02;margin:16px 0}
+.hero p{font-size:1.05rem;line-height:1.7;color:#52665b;max-width:530px}
+.btn{border:0;border-radius:999px;background:var(--site-primary);color:white;padding:13px 19px;font-weight:750;cursor:pointer;font-size:.95rem}
+.btn.secondary{background:#fff;color:#176b55;border:1px solid #cad9cc}
+.hero-art{background:#dce9d9;border-radius:28px;padding:24px;min-height:330px;display:grid;place-items:center;position:relative;overflow:hidden}
+.plate{width:min(290px,75%);aspect-ratio:1;border-radius:50%;background:#fff;border:12px solid #f5f2e9;box-shadow:0 18px 35px #355c4020;display:grid;place-items:center;position:relative}
+.food{font-size:6rem}
+.leaf{position:absolute;font-size:2rem;opacity:.9}.leaf.a{top:22px;left:24px}.leaf.b{right:25px;bottom:22px}
+.art-note{position:absolute;bottom:18px;left:18px;background:#fff;border-radius:14px;padding:12px 15px;box-shadow:0 8px 25px #1a3c2418;font-size:.82rem}
+section.content{padding:52px clamp(18px,7vw,100px)}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:25px}
+h2{font-size:clamp(2rem,3vw,3rem);margin:8px 0}
+.section-head p{max-width:440px;color:#66776d;line-height:1.6}
+.layout{display:grid;grid-template-columns:.95fr 1.05fr;gap:24px;align-items:start}
+.panel{background:#fff;border:1px solid #e0e5dc;border-radius:22px;padding:clamp(18px,3vw,30px);box-shadow:0 12px 35px #253b2b08}
+.panel h3{font-size:1.65rem;margin:0 0 6px}
+.muted{color:#718077;font-size:.9rem;line-height:1.5}
+label{display:block;font-size:.85rem;font-weight:750;margin:18px 0 7px}
+input[type=text],input[type=number],select,textarea{width:100%;border:1px solid #d8e0d7;border-radius:12px;padding:12px 13px;background:#fbfcf9;color:#1d2c26;font:inherit;outline-color:#176b55}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.check{display:flex;align-items:center;gap:9px;border:1px solid #dce4db;border-radius:12px;padding:11px 10px;font-size:.86rem;background:#fbfcf9}
+.check input{accent-color:#176b55;width:16px;height:16px}
+.small{font-size:.76rem;color:#7a877e;line-height:1.5}
+.result-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:18px}
+.food-list{display:grid;gap:12px}
+.food-card{display:grid;grid-template-columns:66px 1fr;gap:14px;padding:13px;border:1px solid #e1e7de;border-radius:16px}
+.food-emoji{width:66px;height:66px;border-radius:14px;background:#edf3e9;display:grid;place-items:center;font-size:2rem}
+.food-card h4{margin:2px 0 5px;font-size:1rem}
+.food-card p{margin:0;color:#66766b;font-size:.83rem;line-height:1.45}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.tag{font-size:.7rem;border-radius:999px;padding:4px 8px;background:#e8f2e8;color:#176b55;font-weight:750}
+.tag.warn{background:#fff0d9;color:#85521b}
+.empty{padding:26px;border-radius:16px;background:#f5f7f1;color:#617268;line-height:1.6}
+.qr-row{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;margin-top:24px;background:#f0f4eb;border-radius:20px;padding:20px}
+.qr-row p{color:#5d6f62;line-height:1.5;font-size:.9rem}
+.qr-placeholder{width:100px;height:100px;background:white;border:1px solid #d6e0d3;border-radius:10px;display:grid;place-items:center;text-align:center;font-size:.7rem;color:#718077;padding:8px}
+footer{padding:26px clamp(18px,7vw,100px);background:#173e31;color:#e6f1e8;font-size:.82rem;line-height:1.6}
+footer strong{color:#fff}
+@media(max-width:760px){nav{display:none}.hero,.layout{grid-template-columns:1fr}.hero{padding-top:36px}.hero-art{min-height:250px}.section-head{display:block}.qr-row{grid-template-columns:1fr auto}.checks{grid-template-columns:1fr 1fr}}
+@media(max-width:390px){.checks{grid-template-columns:1fr}.qr-placeholder{width:78px;height:78px}}
+</style>
+</head>
+<body>
+<div id="app" data-sites-preview-theme>
+<header>
+ <div class="brand"><span class="logo">✳</span> MenuKind</div>
+ <nav><a href="#how">How it works</a><a href="#menu">Personal menu</a><a href="#safety">Food safety</a></nav>
+ <span class="pill">A menu with you in mind</span>
+</header>
+<main>
+<section class="hero">
+ <div><div class="eyebrow">A kinder way to dine</div><h1>Good food should fit <em>you.</em></h1>
+ <p>Scan, share your dietary needs, and explore a sample menu tailored around your preferences, allergies and health considerations.</p>
+ <a href="#menu"><button class="btn">Build my menu&nbsp; ↗</button></a>
+ <span style="margin-left:12px;font-size:.8rem;color:#64766a">No account needed for this demo</span></div>
+ <div class="hero-art" aria-label="Illustration of a healthy meal"><span class="leaf a">✿</span><span class="leaf b">✦</span><div class="plate"><div class="food">🥗</div></div><div class="art-note">✦ &nbsp; Your needs. Your choices.</div></div>
+</section>
+<section class="content" id="how">
+ <div class="section-head"><div><div class="eyebrow">Simple by design</div><h2>From scan to plate.</h2></div><p>One quick form helps the restaurant understand what you need before you order.</p></div>
+ <div class="layout">
+  <div class="panel"><h3>How it works</h3><p class="muted">A simple flow for guests and restaurant teams.</p>
+   <div style="display:grid;gap:17px;margin-top:24px">
+    <div style="display:flex;gap:14px"><span class="logo">1</span><div><strong>Scan the table QR</strong><div class="muted">Open the menu on your own phone.</div></div></div>
+    <div style="display:flex;gap:14px"><span class="logo">2</span><div><strong>Choose your needs</strong><div class="muted">Select allergies, dietary preferences or health-related goals.</div></div></div>
+    <div style="display:flex;gap:14px"><span class="logo">3</span><div><strong>Explore suitable options</strong><div class="muted">See sample dishes and clear ingredient notes.</div></div></div>
+   </div>
+   <div class="qr-row"><div><strong>Restaurant QR entry</strong><p>When this demo is published, generate a QR code that points to its public website URL.</p></div><div class="qr-placeholder">QR goes<br>here</div></div>
+  </div>
+  <div class="panel" id="menu">
+   <div class="result-top"><div><div class="eyebrow">Guest form</div><h3>Make it your menu</h3></div><span class="pill">Demo</span></div>
+   <p class="muted">Select any needs that apply. Results update when you press the button.</p>
+   <form id="needsForm">
+    <label for="guest">Name (optional)</label><input id="guest" type="text" placeholder="What should we call you?">
+    <label for="diet">Dietary preference</label><select id="diet"><option value="any">No preference</option><option value="vegetarian">Vegetarian</option><option value="vegan">Vegan</option><option value="jain">Jain-style (confirm ingredients)</option><option value="gluten">Gluten-free preference</option></select>
+    <label>Health considerations / ingredients to avoid</label>
+    <div class="checks">
+     <label class="check"><input type="checkbox" name="need" value="lower-sugar"> Lower sugar</label>
+     <label class="check"><input type="checkbox" name="need" value="gluten"> Gluten / wheat</label>
+     <label class="check"><input type="checkbox" name="need" value="dairy"> Milk / dairy</label>
+     <label class="check"><input type="checkbox" name="need" value="nuts"> Peanuts / tree nuts</label>
+     <label class="check"><input type="checkbox" name="need" value="vegan"> Vegan</label>
+     <label class="check"><input type="checkbox" name="need" value="vegetarian"> Vegetarian</label>
+    </div>
+    <label for="other">Other allergy or request (optional)</label><input id="other" type="text" placeholder="Tell staff about any other concern">
+    <p class="small">For privacy, avoid entering diagnosis details. Tell restaurant staff directly about severe allergies and ask them to confirm ingredients and cross-contact controls.</p>
+    <button class="btn" type="submit" style="width:100%;margin-top:14px">Show my sample menu →</button>
+   </form>
+  </div>
+ </div>
+</section>
+<section class="content" style="background:#eef2e9" id="results">
+ <div class="section-head"><div><div class="eyebrow">Your results</div><h2>Options to explore.</h2></div><p>These are illustrative menu ideas, not medical advice or a guarantee that a dish is allergen-safe.</p></div>
+ <div id="resultsBox" class="panel"><div class="empty">Fill in the guest form and select <strong>Show my sample menu</strong> to see example dishes that match your choices.</div></div>
+</section>
+<section class="content" id="safety">
+ <div class="layout">
+  <div><div class="eyebrow">Trust matters</div><h2>Clear information.<br>Safer conversations.</h2><p class="muted">The website helps guests communicate their needs; restaurant staff must verify recipes, ingredients and kitchen handling before serving.</p></div>
+  <div class="panel"><h3>Important food-safety note</h3><p class="muted">This is a school-project prototype. It does not diagnose conditions, prescribe diets, calculate medical nutrition, or certify foods as safe. Allergens can be present through shared equipment or cross-contact. Always confirm with restaurant staff, especially for severe allergies. People managing diabetes or another condition should follow guidance from their qualified healthcare professional.</p></div>
+ </div>
+</section>
+</main>
+<footer><strong>MenuKind</strong> — a thoughtful menu concept.<br>Prototype only · Sample dish data · No information is sent to a server or saved by this demo.</footer>
+</div>
+<script>
+const dishes = [
+ {name:"Garden quinoa bowl",emoji:"🥗",desc:"Quinoa, roasted vegetables, greens and lemon dressing.",tags:["vegetarian","vegan","lower-sugar","gluten"],note:"Confirm dressing ingredients and kitchen cross-contact."},
+ {name:"Lentil & veggie plate",emoji:"🍲",desc:"Lentils, seasonal vegetables and brown rice.",tags:["vegetarian","vegan","lower-sugar","gluten"],note:"Ask staff to verify spices, stock and preparation."},
+ {name:"Tofu rainbow stir-fry",emoji:"🥦",desc:"Tofu with colourful vegetables; sauce served separately on request.",tags:["vegetarian","vegan","dairy","lower-sugar"],note:"Sauces may contain soy, wheat or other allergens."},
+ {name:"Herb chicken with greens",emoji:"🍗",desc:"Grilled chicken, steamed greens and a side of rice.",tags:["lower-sugar","gluten","dairy"],note:"Confirm marinade and cooking surface with staff."},
+ {name:"Fresh fruit cup",emoji:"🍓",desc:"Seasonal fresh fruit, with no added syrup in this sample description.",tags:["vegetarian","vegan","gluten","dairy","nuts"],note:"Fruit still contains naturally occurring sugars; portion needs vary."},
+ {name:"Chickpea salad",emoji:"🥙",desc:"Chickpeas, cucumber, tomato, herbs and olive-oil dressing.",tags:["vegetarian","vegan","lower-sugar","gluten","dairy","nuts"],note:"Confirm dressing, garnish and shared preparation surfaces."}
+];
+const labels={"lower-sugar":"lower-sugar option","gluten":"gluten/wheat-aware sample","dairy":"no dairy listed in sample","nuts":"no nuts listed in sample","vegan":"vegan","vegetarian":"vegetarian"};
+document.getElementById("needsForm").addEventListener("submit",function(e){
+ e.preventDefault();
+ const needs=[...document.querySelectorAll('input[name="need"]:checked')].map(x=>x.value);
+ const diet=document.getElementById("diet").value;
+ if(diet==="vegan") needs.push("vegan");
+ if(diet==="vegetarian"||diet==="jain") needs.push("vegetarian");
+ if(diet==="gluten") needs.push("gluten");
+ const unique=[...new Set(needs)];
+ let matches=dishes.filter(d=>unique.every(n=>d.tags.includes(n)));
+ if(!unique.length) matches=dishes;
+ const box=document.getElementById("resultsBox");
+ if(!matches.length){
+   box.innerHTML='<div class="empty"><strong>No exact sample match found.</strong><br>Please ask restaurant staff to review the full ingredient list and suggest an alternative. Do not assume a dish is safe based on this demo.</div>';
+   document.getElementById("results").scrollIntoView({behavior:"smooth"});return;
+ }
+ const heading=unique.length ? "Sample ideas based on your selections" : "Popular sample ideas";
+ box.innerHTML='<div class="result-top"><div><h3>'+heading+'</h3><div class="muted">'+matches.length+' illustrative option(s) · staff verification required</div></div><span class="pill">Sample menu</span></div><div class="food-list">'+matches.map(d=>'<article class="food-card"><div class="food-emoji">'+d.emoji+'</div><div><h4>'+d.name+'</h4><p>'+d.desc+'</p><div class="tags">'+d.tags.filter(t=>unique.includes(t)).map(t=>'<span class="tag">'+labels[t]+'</span>').join('')+'</div><p style="margin-top:8px"><strong>Ask staff:</strong> '+d.note+'</p></div></article>').join('')+'</div><p class="small" style="margin-top:18px">These matches use simplified demo tags, not verified recipes. A tag never guarantees the absence of an allergen or suitability for a medical condition.</p>';
+ document.getElementById("results").scrollIntoView({behavior:"smooth"});
+});
+</script>
+</body>
+</html>
